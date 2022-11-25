@@ -48,16 +48,16 @@ public record LuceneQueryPartGrader(String name, Double maxGrade) implements Par
         double grade = maxGrade();
         List<String> errors = new ArrayList<>();
 
-        int gamesToSerializeCount = context.getRandomSource().nextInt(50) + 20;
+        int gamesToSerializeCount = context.randomSource().nextInt(50) + 20;
         List<Game> games = context.selectGames(gamesToSerializeCount);
         ElasticsearchClient elasticsearchClient = context.newElasticsearchClient();
         deleteIndexContent(elasticsearchClient, INDEX_NAME);
         sendGamesToIndex(elasticsearchClient, INDEX_NAME, games);
 
-        int dedicatedGenreGamesCount = context.getRandomSource().nextInt(5) + 4;
+        int dedicatedGenreGamesCount = context.randomSource().nextInt(5) + 4;
         String selectedGenre = "selectedGenre";
         Set<Game> gamesWithTheSelectedGenre = IntStream.range(0, dedicatedGenreGamesCount)
-            .mapToObj(i -> buildNewGame(context.getRandomSource(), selectedGenre))
+            .mapToObj(i -> buildNewGame(context.randomSource(), selectedGenre))
             .collect(Collectors.toSet());
         sendGamesToIndex(elasticsearchClient, INDEX_NAME, gamesWithTheSelectedGenre);
 

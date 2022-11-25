@@ -41,7 +41,7 @@ public record FileToAmqpPartGrader(String name, Double maxGrade) implements Part
         double grade = maxGrade();
         List<String> errors = new ArrayList<>();
 
-        int gamesToSerializeCount = context.getRandomSource().nextInt(10);
+        int gamesToSerializeCount = context.randomSource().nextInt(10);
         List<Game> games = context.selectGames(gamesToSerializeCount);
         Path gamesFilePath = createNewJsonGamesFile(context.om, games);
 

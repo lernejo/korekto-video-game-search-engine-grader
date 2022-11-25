@@ -7,6 +7,7 @@ import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lernejo.korekto.toolkit.GradingConfiguration;
 import com.github.lernejo.korekto.toolkit.GradingContext;
+import com.github.lernejo.korekto.toolkit.misc.RandomSupplier;
 import com.github.lernejo.korekto.toolkit.partgrader.MavenContext;
 import com.rabbitmq.client.ConnectionFactory;
 import org.apache.http.HttpHost;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class LaunchingContext extends GradingContext implements MavenContext {
+    public static RandomSupplier RANDOM = RandomSupplier.createRandom();
     public final ObjectMapper om;
     public final List<Game> games;
     public final Integer rabbitMqPort;
@@ -106,5 +108,9 @@ public class LaunchingContext extends GradingContext implements MavenContext {
 
     public SilentJacksonConverterFactory.ExceptionHolder newExceptionHolder() {
         return exceptionHolderSupplier.get();
+    }
+
+    public RandomSupplier randomSource() {
+        return RANDOM;
     }
 }

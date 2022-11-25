@@ -116,7 +116,7 @@ public class VideoGameSearchEngineGrader implements Grader<LaunchingContext> {
             new PmdPartGrader<>("Coding style", -4.0D,
                 Rule.buildExcessiveClassLengthRule(50),
                 Rule.buildExcessiveMethodLengthRule(15),
-                Rule.buildFieldMandatoryModifierRule("private", "final", "!static")
+                Rule.buildFieldMandatoryModifierRule(1, "private", "final", "!static")
             )
         );
     }
