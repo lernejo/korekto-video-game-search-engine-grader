@@ -94,27 +94,25 @@ public record AmqpToEsPartGrader(String name, Double maxGrade) implements PartGr
             }
 
             try {
-                if (!elasticsearchClient.indices().exists(new ExistsRequest.Builder().index(INDEX_NAME).build()).value()) {
-                    context.setElasticsearchIndexNotCreated();
-                    grade -= maxGrade() / 2;
-                    errors.add("No index `" + INDEX_NAME + "` were created after message consumption");
-                } else {
-                    try {
-                        List<Game> indexedGames = await().atMost(5, SECONDS).until(() -> searchAll(elasticsearchClient, INDEX_NAME, Game.class), gs -> gs.size() == 4);
+                await().atMost(10, SECONDS).until(() -> elasticsearchClient.indices().exists(new ExistsRequest.Builder().index(INDEX_NAME).build()).value());
 
-                        Set<String> indexedTitles = indexedGames.stream().map(Game::title).collect(Collectors.toSet());
-                        Set<String> expectedTitles = games.stream().map(Game::title).collect(Collectors.toSet());
-                        if (!expectedTitles.equals(indexedTitles)) {
-                            grade -= maxGrade() / 3;
-                            errors.add("Index `" + INDEX_NAME + "` contains these games: " + indexedTitles + " whereas those were expected: " + expectedTitles);
-                        }
-                    } catch (ConditionTimeoutException e) {
+                try {
+                    List<Game> indexedGames = await().atMost(5, SECONDS).until(() -> searchAll(elasticsearchClient, INDEX_NAME, Game.class), gs -> gs.size() == 4);
+
+                    Set<String> indexedTitles = indexedGames.stream().map(Game::title).collect(Collectors.toSet());
+                    Set<String> expectedTitles = games.stream().map(Game::title).collect(Collectors.toSet());
+                    if (!expectedTitles.equals(indexedTitles)) {
                         grade -= maxGrade() / 3;
-                        errors.add("Index `" + INDEX_NAME + "` does not contains the 4 games sent of the " + QUEUE_NAME + " queue.");
+                        errors.add("Index `" + INDEX_NAME + "` contains these games: " + indexedTitles + " whereas those were expected: " + expectedTitles);
                     }
+                } catch (ConditionTimeoutException e) {
+                    grade -= maxGrade() / 3;
+                    errors.add("Index `" + INDEX_NAME + "` does not contains the 4 games sent of the " + QUEUE_NAME + " queue.");
                 }
-            } catch (IOException e) {
-                throw new UncheckedIOException("Unable to check index: " + e.getMessage(), e);
+            } catch (ConditionTimeoutException e) {
+                context.setElasticsearchIndexNotCreated();
+                grade -= maxGrade() / 2;
+                errors.add("No index `" + INDEX_NAME + "` were created after message consumption");
             }
 
             return result(errors, grade);
@@ -127,8 +125,8 @@ public record AmqpToEsPartGrader(String name, Double maxGrade) implements PartGr
     private <T> List<T> searchAll(ElasticsearchClient client, String indexName, Class<T> targetItemClass) {
         try {
             return client.search(
-                s -> s.index(indexName),
-                targetItemClass)
+                    s -> s.index(indexName),
+                    targetItemClass)
                 .hits().hits().stream().map(Hit::source).toList();
         } catch (IOException e) {
             throw new UncheckedIOException("Unable to search index: " + e.getMessage(), e);
