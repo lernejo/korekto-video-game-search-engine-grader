@@ -113,7 +113,7 @@ public class VideoGameSearchEngineGrader implements Grader<LaunchingContext> {
             new LuceneQueryPartGrader("Part 6 - Lucene querying", 4.0D),
 
             new GitHistoryPartGrader<>("Git (proper descriptive messages)", -4.0D),
-            new PmdPartGrader<>("Coding style", -4.0D,
+            new PmdPartGrader<>("Coding style", -4.0D, 1.0,
                 Rule.buildExcessiveClassLengthRule(50),
                 Rule.buildExcessiveMethodLengthRule(15),
                 Rule.buildFieldMandatoryModifierRule(1, "private", "final", "!static")

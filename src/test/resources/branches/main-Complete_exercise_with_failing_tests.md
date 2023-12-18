@@ -1,12 +1,12 @@
 # Exercice commencé
-Votre note est de **10.5**/22.
+Votre note est de **9.5**/22.
 
 ## Détail
 * Part 1 - Compilation & Tests: 2/4
     * There are test failures, see `mvn verify`
 
-* Part 2 - CI: 1/2
-    * Latest CI run of branch `main` was expected to be in *success* state but found: failure
+* Part 2 - CI: 0/2
+    * No CI runs for `main` branch, check https://github.com/lernejo/video_game_search_engine/actions
 
 * Part 3 - Code Coverage: 0/4
     * Coverage not available when there is test failures
