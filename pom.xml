@@ -17,7 +17,7 @@
         <retrofit.version>2.9.0</retrofit.version>
         <elasticsearch.version>8.11.2</elasticsearch.version>
         <jackson.version>2.16.0</jackson.version>
-        <logback-classic.version>1.4.5</logback-classic.version>
+        <logback-classic.version>1.4.14</logback-classic.version>
 
         <junit.version>5.10.1</junit.version>
         <assertj.version>3.24.2</assertj.version>
