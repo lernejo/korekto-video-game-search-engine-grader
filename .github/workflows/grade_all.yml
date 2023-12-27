@@ -1,0 +1,32 @@
+name: Grade all given accounts
+
+on:
+  workflow_dispatch:
+    inputs:
+      owners:
+        description: List of repositories owners to grade, separated by '\n' char
+        required: true
+      authentication-token:
+        description: Token used to checkout repositories to grade
+        required: true
+
+jobs:
+  grade-all:
+    name: Grade all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Create owners file
+        run: |
+          echo -e "${{ inputs.owners }}" > slugs.txt
+
+      - name: Grade all owners
+        run: |
+          mvn compile exec:java -Dexec.args="-g" -Dgithub_token=${{ inputs.authentication-token }}
