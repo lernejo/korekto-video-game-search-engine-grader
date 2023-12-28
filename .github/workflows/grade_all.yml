@@ -30,3 +30,23 @@ jobs:
       - name: Grade all owners
         run: |
           mvn compile exec:java -Dexec.args="-g" -Dgithub_token=${{ inputs.authentication-token }}
+
+      - name: Upload results as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: target/site
+
+  grade_all_publish:
+    needs: grade-all
+    name: Deploy Grade results on GH pages
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish results as GH pages
+        id: deployment
+        uses: actions/deploy-pages@v4

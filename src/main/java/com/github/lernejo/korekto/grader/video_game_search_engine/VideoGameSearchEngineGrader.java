@@ -19,6 +19,7 @@ import com.github.lernejo.korekto.toolkit.partgrader.JacocoCoveragePartGrader;
 import com.github.lernejo.korekto.toolkit.partgrader.PmdPartGrader;
 import com.github.lernejo.korekto.toolkit.thirdparty.docker.MappedPortsContainer;
 import com.github.lernejo.korekto.toolkit.thirdparty.pmd.Rule;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +60,11 @@ public class VideoGameSearchEngineGrader implements Grader<LaunchingContext> {
             .withEnv("bootstrap.memory_lock", "true")
             .withEnv("ES_JAVA_OPTS", "-Xms256m -Xmx512m")
             .startAndWaitForServiceToBeUp();
+    }
+
+    @Override
+    public String name() {
+        return "\uD83C\uDFAE Video game search engine project";
     }
 
     @Override
