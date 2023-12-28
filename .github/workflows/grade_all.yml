@@ -29,7 +29,7 @@ jobs:
 
       - name: Grade all owners
         run: |
-          mvn compile exec:java -Dexec.args="-g" -Dgithub_token=${{ inputs.authentication-token }}
+          mvn compile exec:java -Dexec.args="-g" -Dgithub_token=${{ inputs.authentication-token }} -DSERVER_START_TIMEOUT=60 -DINJECTOR_START_TIMEOUT=30
 
       - name: Upload results as Pages artifact
         uses: actions/upload-pages-artifact@v3
