@@ -15,7 +15,7 @@
 
         <korekto-toolkit.version>1.4.0</korekto-toolkit.version>
         <retrofit.version>2.11.0</retrofit.version>
-        <elasticsearch.version>8.17.1</elasticsearch.version>
+        <elasticsearch.version>8.17.2</elasticsearch.version>
         <jackson.version>2.18.2</jackson.version>
         <logback-classic.version>1.5.16</logback-classic.version>
 
